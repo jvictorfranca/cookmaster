@@ -15,12 +15,26 @@ const create = async (name, email, password) => {
 
 const findByEmail = async (email) => {
   const conn = await connect();
-  const product = await conn.collection('users').findOne({ email });
-  if (!product) return null;
-  return product;
+  const user = await conn.collection('users').findOne({ email });
+  if (!user) return null;
+  return user;
+};
+
+const isUserInvalid = (user) => {
+  if (!user) { return true; }
+  if (!user.email || !user.password) { return true; }
+  return false;
+}; 
+
+const checkLogin = async (email, password) => {
+  const user = await findByEmail(email);
+  if (isUserInvalid(user)) { return false; }
+  if (user.email === email && user.password === password) { return true; }
+  return false;
 };
 
 module.exports = {
   create,
   findByEmail,
+  checkLogin,
 };

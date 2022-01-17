@@ -1,7 +1,10 @@
 const INVALID_ENTRIES_MESSAGE = 'Invalid entries. Try again.';
 const EMAIL_REGISTERED_MESSAGE = 'Email already registered';
+const FIELDS_FILLED_MESSAGE = 'All fields must be filled';
+const INCORRECT_FIELDS_MESSAGE = 'Incorrect username or password';
 
-const { create, findByEmail } = require('../models/user.model');
+const { create, findByEmail, checkLogin } = require('../models/user.model');
+const { genToken } = require('./authService');
 
 const errorObjectCreator = (status, message) => ({
   status,
@@ -41,6 +44,20 @@ const createUser = async (name, email, password) => {
   };
 };
 
+const loginUser = async (email, password) => {
+  const checked = await checkLogin(email, password);
+  if (!email || !password) { return errorObjectCreator(401, FIELDS_FILLED_MESSAGE); }
+  if (!checked) { return errorObjectCreator(401, INCORRECT_FIELDS_MESSAGE); }
+  const user = await findByEmail(email);
+  const payload = {
+    id: user.id,
+    role: user.role,
+    email: user.email,
+  };
+  return { answer: { token: genToken(payload) }, status: 200 };
+};
+
 module.exports = {
   createUser,
+  loginUser,
 };
