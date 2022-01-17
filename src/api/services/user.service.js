@@ -49,11 +49,14 @@ const loginUser = async (email, password) => {
   if (!email || !password) { return errorObjectCreator(401, FIELDS_FILLED_MESSAGE); }
   if (!checked) { return errorObjectCreator(401, INCORRECT_FIELDS_MESSAGE); }
   const user = await findByEmail(email);
+  const { _id: id } = user; 
+  // console.log(user);
   const payload = {
-    id: user.id,
+    id,
     role: user.role,
     email: user.email,
   };
+  // console.log(payload);
   return { answer: { token: genToken(payload) }, status: 200 };
 };
 
