@@ -1,5 +1,5 @@
 const {
-   createRecipe, findRecipes, findRecipeById, updateRecipeByIdService, 
+   createRecipe, findRecipes, findRecipeById, updateRecipeByIdService, deleteRecipeByIdService, 
   } = require('../services/recipe.service');
 
 const createRecipeController = async (req, res, _next) => {
@@ -30,9 +30,19 @@ const updateRecipeByIdController = async (req, res, _next) => {
   return res.status(answerObject.status).json(answerObject.answer);
 };
 
+const deleteRecipeByIdController = async (req, res, _next) => {
+  const { id } = req.params;
+  
+  const answerObject = await deleteRecipeByIdService( 
+    id, req.headers.authorization,
+    );
+  return res.status(answerObject.status).json(answerObject.answer);
+};
+
 module.exports = {
   createRecipeController,
   findRecipesController,
   findRecipeByIdController,
   updateRecipeByIdController,
+  deleteRecipeByIdController,
 };

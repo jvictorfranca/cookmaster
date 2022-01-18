@@ -5,7 +5,8 @@ const {
    createRecipeController,
    findRecipesController,
    findRecipeByIdController,
-   updateRecipeByIdController, 
+   updateRecipeByIdController,
+   deleteRecipeByIdController, 
   } = require('./controllers/recipe.controller');
 const { createUserController, loginUserController } = require('./controllers/user.controller');
 
@@ -26,5 +27,7 @@ app.get('/recipes', findRecipesController);
 app.get('/recipes/:id', findRecipeByIdController);
 
 app.put('/recipes/:id', updateRecipeByIdController);
+
+app.delete('/recipes/:id', deleteRecipeByIdController);
 
 module.exports = app;
