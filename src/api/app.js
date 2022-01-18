@@ -1,7 +1,10 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
-const { createRecipeController } = require('./controllers/recipe.controller');
+const {
+   createRecipeController,
+   findRecipesController, 
+  } = require('./controllers/recipe.controller');
 const { createUserController, loginUserController } = require('./controllers/user.controller');
 
 const app = express();
@@ -16,5 +19,7 @@ app.get('/', (request, response) => {
 app.post('/users', createUserController);
 app.post('/login', loginUserController);
 app.post('/recipes', createRecipeController);
+
+app.get('/recipes', findRecipesController);
 
 module.exports = app;

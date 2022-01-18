@@ -1,7 +1,7 @@
 const INVALID_ENTRIES_MESSAGE = 'Invalid entries. Try again.';
 const INVALID_TOKEN_MESSAGE = 'jwt malformed';
 
-const { create } = require('../models/recipe.model');
+const { create, find } = require('../models/recipe.model');
 const { verifyToken } = require('./authService');
 
 const errorObjectCreator = (status, message) => ({
@@ -34,6 +34,13 @@ const createdId = await create(name, ingredients, preparation, userId);
   };
 };
 
+const findRecipes = async () => {
+  const recipes = await find();
+  if (!recipes) { return { answer: { message: 'Not Found' } }; }
+  return { answer: recipes, status: 200 };
+};
+
 module.exports = {
   createRecipe,
+  findRecipes,
 };
