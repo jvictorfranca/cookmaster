@@ -1,7 +1,8 @@
 const INVALID_ENTRIES_MESSAGE = 'Invalid entries. Try again.';
 const INVALID_TOKEN_MESSAGE = 'jwt malformed';
+const MISSING_TOKEN_MESSAGE = 'missing auth token';
 
-const { create, find, findById } = require('../models/recipe.model');
+const { create, find, findById, updateById } = require('../models/recipe.model');
 const { verifyToken } = require('./authService');
 
 const errorObjectCreator = (status, message) => ({
@@ -46,8 +47,28 @@ const findRecipeById = async (id) => {
   return { answer: recipe, status: 200 };
 };
 
+const updateRecipeByIdService = async (id, recipeOBJ, token) => {
+  const { name, ingredients, preparation } = recipeOBJ; 
+  if (!token) {
+    return errorObjectCreator(401, MISSING_TOKEN_MESSAGE);
+  } const tokenVerified = verifyToken(token);
+  if (!tokenVerified) {
+  return errorObjectCreator(401, INVALID_TOKEN_MESSAGE);
+} 
+const { answer } = await findRecipeById(id);
+
+const { userId } = answer;
+  if (userId !== tokenVerified.data.id
+     && tokenVerified.data.role !== 'admin') { return errorObjectCreator(401, 'invalid user'); }
+  await updateById(id, name, ingredients, preparation);
+     const updatedProduct = {
+       userId, name, ingredients, preparation, _id: id,
+     }; return { answer: updatedProduct, status: 200 };
+};
+
 module.exports = {
   createRecipe,
   findRecipes,
   findRecipeById,
+  updateRecipeByIdService,
 };

@@ -4,7 +4,8 @@ const path = require('path');
 const {
    createRecipeController,
    findRecipesController,
-   findRecipeByIdController, 
+   findRecipeByIdController,
+   updateRecipeByIdController, 
   } = require('./controllers/recipe.controller');
 const { createUserController, loginUserController } = require('./controllers/user.controller');
 
@@ -23,5 +24,7 @@ app.post('/recipes', createRecipeController);
 
 app.get('/recipes', findRecipesController);
 app.get('/recipes/:id', findRecipeByIdController);
+
+app.put('/recipes/:id', updateRecipeByIdController);
 
 module.exports = app;
