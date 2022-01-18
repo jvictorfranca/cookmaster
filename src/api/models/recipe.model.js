@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 const connect = require('./connection');
 
 const create = async (name, ingredients, preparation, userId) => {
@@ -18,7 +20,18 @@ const find = async () => {
   return recipes;
 };
 
+const findById = async (id) => {
+  const conn = await connect();
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return null; 
+}
+  const recipe = await conn.collection('recipes').findOne(ObjectId(id));
+  if (!recipe) return null;
+  return recipe;
+};
+
 module.exports = {
   create,
   find,
+  findById,
 };
