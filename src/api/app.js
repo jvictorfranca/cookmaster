@@ -1,12 +1,25 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, callback) => {
+    callback(null, 'uploads/');
+  },
+  filename: (req, _file, callback) => {
+    callback(null, `${req.params.id}.jpeg`);
+  },
+});
+const upload = multer(storage);
+
 const {
    createRecipeController,
    findRecipesController,
    findRecipeByIdController,
    updateRecipeByIdController,
-   deleteRecipeByIdController, 
+   deleteRecipeByIdController,
+   uploadImageController, 
   } = require('./controllers/recipe.controller');
 const { createUserController, loginUserController } = require('./controllers/user.controller');
 
@@ -22,6 +35,7 @@ app.get('/', (request, response) => {
 app.post('/users', createUserController);
 app.post('/login', loginUserController);
 app.post('/recipes', createRecipeController);
+app.put('/recipes/:id/image/', upload.single('image'), uploadImageController);
 
 app.get('/recipes', findRecipesController);
 app.get('/recipes/:id', findRecipeByIdController);

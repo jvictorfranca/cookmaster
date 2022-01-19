@@ -46,10 +46,19 @@ const deleteById = async (id) => {
   return insertedId;
 };
 
+const uploadImage = async (id, path) => {
+  const conn = await connect();
+  const { insertedId } = await
+   conn.collection('recipes')
+   .updateOne({ _id: ObjectId(id) }, { $set: { image: path } });
+  return insertedId;
+};
+
 module.exports = {
   create,
   find,
   findById,
   updateById,
   deleteById,
+  uploadImage,
 };

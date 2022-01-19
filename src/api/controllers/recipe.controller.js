@@ -1,5 +1,6 @@
-const {
-   createRecipe, findRecipes, findRecipeById, updateRecipeByIdService, deleteRecipeByIdService, 
+ const {
+   createRecipe, findRecipes,
+    findRecipeById, updateRecipeByIdService, deleteRecipeByIdService, uploadImageService, 
   } = require('../services/recipe.service');
 
 const createRecipeController = async (req, res, _next) => {
@@ -39,10 +40,23 @@ const deleteRecipeByIdController = async (req, res, _next) => {
   return res.status(answerObject.status).json(answerObject.answer);
 };
 
+const uploadImageController = async (req, res, _next) => {
+  const { id } = req.params;
+  console.log(req.file);
+  console.log('id:', id);
+  const imagePath = `localhost:3000/src/uploads/${id}.jpeg`;
+  console.log('path:', imagePath);
+  const answerObject = await uploadImageService( 
+    id, req.headers.authorization, imagePath,
+    );
+  return res.status(answerObject.status).json(answerObject.answer);
+};
+
 module.exports = {
   createRecipeController,
   findRecipesController,
   findRecipeByIdController,
   updateRecipeByIdController,
   deleteRecipeByIdController,
+  uploadImageController,
 };
