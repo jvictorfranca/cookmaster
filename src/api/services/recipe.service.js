@@ -21,7 +21,7 @@ const checkValid = (name, ingredients, preparation) => {
 
 const createRecipe = async (name, ingredients, preparation, tokenData) => {
   if (checkValid(name, ingredients, preparation)) {
- return errorObjectCreator(400, INVALID_ENTRIES_MESSAGE);
+ throw errorObjectCreator(400, INVALID_ENTRIES_MESSAGE);
 }
 // const tokenVerified = verifyToken(token);
 // if (!token || !tokenVerified) {
@@ -60,7 +60,7 @@ const { answer } = await findRecipeById(id);
 
 const { userId } = answer;
   if (userId !== tokenData.id
-     && tokenData.role !== 'admin') { return errorObjectCreator(401, 'invalid user'); }
+     && tokenData.role !== 'admin') { throw errorObjectCreator(401, 'invalid user'); }
   await updateById(id, name, ingredients, preparation);
      const updatedProduct = {
        userId, name, ingredients, preparation, _id: id,
@@ -78,7 +78,7 @@ const { answer } = await findRecipeById(id);
 
 const { userId } = answer;
   if (userId !== tokenData.id
-     && tokenData.role !== 'admin') { return errorObjectCreator(401, 'invalid user'); }
+     && tokenData.role !== 'admin') { throw errorObjectCreator(401, 'invalid user'); }
   await deleteById(id); 
   return { answer, status: 204 };
 };
@@ -95,7 +95,7 @@ answer = { ...answer, image: imagePath };
 
 const { userId } = answer;
   if (userId !== tokenData.id
-     && tokenData.role !== 'admin') { return errorObjectCreator(401, 'invalid user'); }
+     && tokenData.role !== 'admin') { throw errorObjectCreator(401, 'invalid user'); }
   await uploadImage(id, imagePath); 
   return { answer, status: 200 };
 };

@@ -23,6 +23,7 @@ const {
   } = require('./controllers/recipe.controller');
 const { createUserController, loginUserController } = require('./controllers/user.controller');
 const authMiddleware = require('./middlewares/authMiddleware');
+const errorMiddleware = require('./middlewares/errorMiddleware');
 
 const app = express();
 app.use('/images', express.static(path.join(__dirname, '..', 'uploads')));
@@ -44,5 +45,7 @@ app.get('/recipes/:id', findRecipeByIdController);
 app.put('/recipes/:id', authMiddleware, updateRecipeByIdController);
 
 app.delete('/recipes/:id', authMiddleware, deleteRecipeByIdController);
+
+app.use(errorMiddleware);
 
 module.exports = app;
