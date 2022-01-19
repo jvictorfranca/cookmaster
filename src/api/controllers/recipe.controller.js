@@ -5,7 +5,7 @@
 
 const createRecipeController = async (req, res, _next) => {
   const answerObject = await createRecipe(
-    req.body.name, req.body.ingredients, req.body.preparation, req.headers.authorization,
+    req.body.name, req.body.ingredients, req.body.preparation, req.tokenData,
     );
   return res.status(answerObject.status).json(answerObject.answer);
 };
@@ -26,7 +26,7 @@ const updateRecipeByIdController = async (req, res, _next) => {
   const recipeOBJ = req.body;
   
   const answerObject = await updateRecipeByIdService( 
-    id, recipeOBJ, req.headers.authorization,
+    id, recipeOBJ, req.tokenData,
     );
   return res.status(answerObject.status).json(answerObject.answer);
 };
@@ -35,19 +35,19 @@ const deleteRecipeByIdController = async (req, res, _next) => {
   const { id } = req.params;
   
   const answerObject = await deleteRecipeByIdService( 
-    id, req.headers.authorization,
+    id, req.tokenData,
     );
   return res.status(answerObject.status).json(answerObject.answer);
 };
 
 const uploadImageController = async (req, res, _next) => {
   const { id } = req.params;
-  console.log(req.file);
-  console.log('id:', id);
+  // console.log(req.file);
+  // console.log('id:', id);
   const imagePath = `localhost:3000/src/uploads/${id}.jpeg`;
-  console.log('path:', imagePath);
+  // console.log('path:', imagePath);
   const answerObject = await uploadImageService( 
-    id, req.headers.authorization, imagePath,
+    id, req.tokenData, imagePath,
     );
   return res.status(answerObject.status).json(answerObject.answer);
 };
